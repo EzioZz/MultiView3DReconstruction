@@ -73,6 +73,8 @@ void W2UV(int NO, double Xw, double Yw, double Zw, double &u, double &v){
     double su = M[NO][0][0]*Xw + M[NO][0][1]*Yw + M[NO][0][2]*Zw + M[NO][0][3];
     double sv = M[NO][1][0]*Xw + M[NO][1][1]*Yw + M[NO][1][2]*Zw + M[NO][1][3];
     double s = M[NO][2][0]*Xw + M[NO][2][1]*Yw + M[NO][2][2]*Zw + M[NO][2][3];
+    u = su/s;
+    v = sv/s;
 }
 
 void sculpt(){
@@ -81,8 +83,8 @@ void sculpt(){
     for(int i=10; i<230; i++){
         for(int j=30; j<250; j++){
             for(int k=0; k<200; k++){
-                
-            }
+                W2UV()
+            } 
         }
     }
 
