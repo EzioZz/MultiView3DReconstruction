@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "string": "cpp",
+        "iostream": "cpp",
+        "vector": "cpp",
+        "queue": "cpp",
+        "iosfwd": "cpp"
+    },
+    "python.pythonPath": "/Users/yanyucheng/anaconda3/bin/python",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.jpg": true
+    }
+}
