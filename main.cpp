@@ -138,7 +138,7 @@ void out(){
     for(int i=10; i<230; i++){
         for(int j=30; j<250; j++){
             for(int k=0; k<200; k++){
-                if(W[i][j][k]==1) fout<<i<<","<<j<<","<<k<<endl;
+                if(W[i][j][k]==1) fout<<i<<","<<j<<","<<k<<","<<"255,255,0"<<endl;
             }
         }
     }
