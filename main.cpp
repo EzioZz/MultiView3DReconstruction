@@ -79,16 +79,26 @@ void init(){
         string img_path = path_fold_img + to_string(i+1) + ".jpg";
         matPicture[i] = imread(img_path, 0);
         imshow("matPicture["+to_string(i)+"]", matPicture[i]);
-//        waitKey(0);
     }
     for(int no=0; no<num_img; no++){
         for(int i=0; i<matPicture[no].rows; i++){
             for(int j=0; j<matPicture[no].cols; j++){
-                Picture[no][i][j] = matPicture[no].at<uchar>(i,j)<100? 1:0; //如果颜色深的话就为鼠标
+//                cout<<(int)matPicture[no].at<uchar>(i,j)<<endl;
+                Picture[no][i][j] = ((int)matPicture[no].at<uchar>(i,j))<100? 1:0; //如果颜色深的话就为鼠标
+//                if(Picture[no][i][j]==1) cout<<"!";
             }
         }
     }
-    
+//    for(int no=0; no<num_img; no++){
+//        Mat out(matPicture[no].size(), matPicture[no].type(), Scalar(255,255,255));
+//        for(int i=0; i<matPicture[no].rows; i++){
+//            for (int j=0; j<matPicture[no].cols; j++) {
+//                if(Picture[no][i][j] == 1)circle(out, Point2i(j,i), 1, Scalar(0,0,0));
+//            }
+//        }
+//        imshow("out", out);
+//        waitKey(0);
+//    }
 }
 
 void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
@@ -111,7 +121,7 @@ void sculpt(){
                 int flag=1; int u,v;
                 for(int no=0; no<num_img; no++){
                     W2UV(no, i, j, k, u, v);  //找对应UV图上的坐标
-                    if(Picture[no][u][v] == 0) {
+                    if(Picture[no][u][v] == 0) {  //如果该点不在物体上
                         flag = 0;
                         break;
                     }
