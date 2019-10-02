@@ -79,7 +79,7 @@ CMakeFiles/3Dreconstruction.dir/src/main.cpp.s: cmake_force
 
 ../bin/3Dreconstruction: CMakeFiles/3Dreconstruction.dir/src/main.cpp.o
 ../bin/3Dreconstruction: CMakeFiles/3Dreconstruction.dir/build.make
-../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_io.dylib
+../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_visualization.dylib
 ../bin/3Dreconstruction: /usr/local/opt/opencv@3/lib/libopencv_stitching.3.4.5.dylib
 ../bin/3Dreconstruction: /usr/local/opt/opencv@3/lib/libopencv_superres.3.4.5.dylib
 ../bin/3Dreconstruction: /usr/local/opt/opencv@3/lib/libopencv_videostab.3.4.5.dylib
@@ -170,7 +170,10 @@ CMakeFiles/3Dreconstruction.dir/src/main.cpp.s: cmake_force
 ../bin/3Dreconstruction: /usr/local/Cellar/vtk/8.2.0_3/lib/libvtkRenderingVolumeOpenGL2-8.2.1.dylib
 ../bin/3Dreconstruction: /usr/local/Cellar/vtk/8.2.0_3/lib/libvtkViewsContext2D-8.2.1.dylib
 ../bin/3Dreconstruction: /usr/local/Cellar/vtk/8.2.0_3/lib/libvtkViewsQt-8.2.1.dylib
+../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_io.dylib
+../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_search.dylib
 ../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_octree.dylib
+../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_kdtree.dylib
 ../bin/3Dreconstruction: /usr/local/Cellar/pcl/1.9.1_4/lib/libpcl_common.dylib
 ../bin/3Dreconstruction: /usr/local/opt/opencv@3/lib/libopencv_shape.3.4.5.dylib
 ../bin/3Dreconstruction: /usr/local/opt/opencv@3/lib/libopencv_phase_unwrapping.3.4.5.dylib

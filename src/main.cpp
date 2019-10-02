@@ -24,11 +24,13 @@ void init();
 void sculpt();
 void W2UV(int NO, double Xw, double Yw, double Zw, double &u, double &v);
 void out();
+void visualization();
 
 int main(){
     init();
     sculpt();
     out();//以三维坐标的形式输出
+    visualization();
     return 0;
 }
 
@@ -91,16 +93,6 @@ void init(){
             }
         }
     }
-//    for(int no=0; no<num_img; no++){
-//        Mat out(matPicture[no].size(), matPicture[no].type(), Scalar(255,255,255));
-//        for(int i=0; i<matPicture[no].rows; i++){
-//            for (int j=0; j<matPicture[no].cols; j++) {
-//                if(Picture[no][i][j] == 1)circle(out, Point2i(j,i), 1, Scalar(0,0,0));
-//            }
-//        }
-//        imshow("out", out);
-//        waitKey(0);
-//    }
 }
 
 void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
@@ -144,4 +136,35 @@ void out(){
             }
         }
     }
+
+}
+
+void visualization(){
+    pcl::visualization::CloudViewer viewer("3DViewer");
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+    cloud.width = 10000;
+    cloud.height = 10000;
+    cloud.is_dense = false;
+    cloud.points.resize(cloud.width * cloud.height);
+
+    // for(size_t cnt = 0; cnt < cloud.points.size(); cnt++){
+        int cnt = 0;
+        for(int i=10; i<230; i++){
+            for(int j=30; j<250; j++){
+                for(int k=0; k<200; k++){
+                    if(W[i][j][k]==1) {
+                        cloud.points[cnt].x = i;
+                        cloud.points[cnt].y = j;
+                        cloud.points[cnt].z = k;
+                        cnt++;
+                    }
+                }
+            }
+    }
+    pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
+    // viewer.showCloud(cloud);
+
+
+
 }

@@ -28,7 +28,9 @@ link_directories(
 )
 target_link_libraries(${PROJECT_NAME}
     ${PCL_COMMON_LIBRARIES} 
-    ${PCL_IO_LIBRARIES} 
+    ${PCL_IO_LIBRARIES}
+    ${PCL_VISUALIZATION_LIBRARIES}
+    # ${PCL_LIBRARIES}
     ${OpenCV_LIBS}
     ${VTK_LIBRARIES}
 )

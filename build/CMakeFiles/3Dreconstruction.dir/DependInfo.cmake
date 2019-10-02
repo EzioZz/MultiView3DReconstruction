@@ -31,7 +31,6 @@ set(CMAKE_TARGET_DEFINITIONS_CXX
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
-  "/usr/local/Cellar/flann/1.9.1_7/include"
   "/usr/local/Cellar/glew/2.1.0/include"
   "/usr/local/Cellar/vtk/8.2.0_3/lib/cmake/vtk-8.2/UseVTK.cmake"
   "/usr/local/Cellar/vtk/8.2.0_3/include/vtk-8.2"
@@ -44,6 +43,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "/usr/local/Cellar/opencv@3/3.4.5_4/include/opencv"
   "/usr/local/Cellar/pcl/1.9.1_4/include/pcl-1.9"
   "/usr/local/include/eigen3"
+  "/usr/local/Cellar/flann/1.9.1_7/include"
   "/usr/local/opt/qt/lib/QtWidgets.framework"
   "/usr/local/opt/qt/lib/QtWidgets.framework/Headers"
   "/usr/local/opt/qt/lib/QtGui.framework"
