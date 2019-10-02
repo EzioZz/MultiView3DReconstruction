@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 #include <opencv2/opencv.hpp>
-// #include <pcl/visualization/cloud_viewer.h>
-// #include <pcl/io/pcd_io.h>
-// #include <pcl/io/io.h>
+#include <pcl/visualization/cloud_viewer.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/io/io.h>
 
 using namespace std;
 using namespace cv;
