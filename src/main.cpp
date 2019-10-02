@@ -140,11 +140,11 @@ void out(){
 }
 
 void visualization(){
-    pcl::visualization::CloudViewer viewer("3DViewer");
+    // pcl::visualization::CloudViewer viewer("3DViewer");
     pcl::PointCloud<pcl::PointXYZ> cloud;
     // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-    cloud.width = 10000;
-    cloud.height = 10000;
+    cloud.width = 5000;
+    cloud.height = 2;
     cloud.is_dense = false;
     cloud.points.resize(cloud.width * cloud.height);
 
