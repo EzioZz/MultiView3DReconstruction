@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
 #include <opencv2/opencv.hpp>
+// #include <pcl/visualization/cloud_viewer.h>
+// #include <pcl/io/pcd_io.h>
+// #include <pcl/io/io.h>
 
 using namespace std;
 using namespace cv;
-
 
 int num_img; //图片的张数
 string path_fold_img; //图片文件夹的路径
