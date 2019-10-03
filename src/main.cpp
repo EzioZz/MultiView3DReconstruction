@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 #include <opencv2/opencv.hpp>
-#include <pcl/visualization/cloud_viewer.h>
-#include <pcl/io/pcd_io.h>
-#include <pcl/io/io.h>
+// #include <pcl/visualization/cloud_viewer.h>
+// #include <pcl/io/pcd_io.h>
+// #include <pcl/io/io.h>
 
 using namespace std;
 using namespace cv;
@@ -18,7 +18,7 @@ Mat matEX[30];
 Mat matIN;
 Mat matM[30];   // M[i] = matIN * matEX[i]
 Mat matPicture[10];
-int W[210][225][180];//只考虑了鼠标坐标系的范围, 值为 0/1，1表述该点属于鼠标
+int W[230][250][250];//只考虑了鼠标坐标系的范围, 值为 0/1，1表述该点属于鼠标
 
 void init();
 void sculpt();
@@ -30,7 +30,7 @@ int main(){
     init();
     sculpt();
     out();//以三维坐标的形式输出
-    visualization();
+    // visualization();
     return 0;
 }
 
@@ -60,6 +60,7 @@ void init(){
     for(int i=0; i<num_img; i++){
         Mat temp(3, 4, CV_64F,EX[i]);
         matEX[i] = temp.clone();
+        cout<<matEX[i]<<endl;
     }
     Mat temp(3,3,CV_64F,IN);
     matIN = temp.clone();
@@ -68,7 +69,7 @@ void init(){
     //---接下来生成matM 和 M[][]
     for(int i=0; i<num_img; i++){
         matM[i] = matIN * matEX[i];
-//        cout<<matM[i]<<endl;
+        //        cout<<matM[i]<<endl;
     }
     for(int k=0; k<num_img; k++){
         for(int i=0; i<3; i++){
@@ -81,29 +82,44 @@ void init(){
     //接下来读入二值化的图像,并存成Picture[][][]的形式
     for(int i=0; i<num_img; i++){
         string img_path = path_fold_img + to_string(i+1) + ".jpg";
+        // cout<<img_path<<endl;
         matPicture[i] = imread(img_path, 0);
-        imshow("matPicture["+to_string(i)+"]", matPicture[i]);
+        // imshow("matPicture["+to_string(i)+"]", matPicture[i]);
     }
     for(int no=0; no<num_img; no++){
         for(int i=0; i<matPicture[no].rows; i++){
             for(int j=0; j<matPicture[no].cols; j++){
-//                cout<<(int)matPicture[no].at<uchar>(i,j)<<endl;
+                //                cout<<(int)matPicture[no].at<uchar>(i,j)<<endl;
                 Picture[no][i][j] = ((int)matPicture[no].at<uchar>(i,j))<100? 1:0; //如果颜色深的话就为鼠标
-//                if(Picture[no][i][j]==1) cout<<"!";
+                //                if(Picture[no][i][j]==1) cout<<"!";
             }
         }
     }
+    
+    // int pick=1;
+    // Mat out(matPicture[pick].size(), matPicture[pick].type(), Scalar(255,255,255));
+    // for(int i=0; i<matPicture[pick].rows; i++){
+    //     for(int j=0; j<matPicture[pick].cols; j++){
+    //         if(Picture[pick][i][j]) circle(out, Point2i(j,i), 1, Scalar(0,0,0), 1);
+    //     }
+    // }
+    // imshow("out",out);
+    // waitKey(0);
+    
 }
 
 void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
     /**@brief Converts the coordinate in World space TO the coordinate in UV space
      NO means the number of the picture
      */
-    double su = M[NO][0][0]*Xw + M[NO][0][1]*Yw + M[NO][0][2]*Zw + M[NO][0][3];
-    double sv = M[NO][1][0]*Xw + M[NO][1][1]*Yw + M[NO][1][2]*Zw + M[NO][1][3];
-    double s = M[NO][2][0]*Xw + M[NO][2][1]*Yw + M[NO][2][2]*Zw + M[NO][2][3];
-    u = su/s;
-    v = sv/s;
+    
+    double su = M[NO][0][0]*((1.0)*Xw) + M[NO][0][1]*((1.0)*Yw) + M[NO][0][2]*((1.0)*Zw) + M[NO][0][3];
+    double sv = M[NO][1][0]*((1.0)*Xw) + M[NO][1][1]*((1.0)*Yw) + M[NO][1][2]*((1.0)*Zw) + M[NO][1][3];
+    double s = M[NO][2][0]*((1.0)*Xw) + M[NO][2][1]*((1.0)*Yw) + M[NO][2][2]*((1.0)*Zw) + M[NO][2][3];
+    // waitKey(0);
+    // cout<<s<<endl;
+    u = (int) su/s;
+    v = (int) sv/s;
 }
 
 void sculpt(){
@@ -112,15 +128,15 @@ void sculpt(){
     for(int i=10; i<230; i++){
         for(int j=30; j<250; j++){
             for(int k=0; k<200; k++){
-                int flag=1; int u,v;
-                for(int no=0; no<num_img; no++){
-                    W2UV(no, i, j, k, u, v);  //找对应UV图上的坐标
-                    if(Picture[no][u][v] == 0) {  //如果该点不在物体上
-                        flag = 0;
-                        break;
+                int u,v;
+                int cnt = 0;
+                for(int no=3; no<4; no++){
+                    W2UV(no, 1.0*i, -1.0*j, -1.0*k, u, v);  //找对应UV图上的坐标
+                    if(Picture[no][u][v] == 1) {  //如果挂点在物体上
+                        cnt++;
                     }
                 }
-                if(flag) W[i][j][k]=1;
+                if(cnt>0) W[i][j][k]=1;
             }
         }
     }
@@ -136,35 +152,33 @@ void out(){
             }
         }
     }
-
+    
 }
 
-void visualization(){
-    // pcl::visualization::CloudViewer viewer("3DViewer");
-    pcl::PointCloud<pcl::PointXYZ> cloud;
-    // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-    cloud.width = 5000;
-    cloud.height = 2;
-    cloud.is_dense = false;
-    cloud.points.resize(cloud.width * cloud.height);
+// void visualization(){
+//     // pcl::visualization::CloudViewer viewer("3DViewer");
+//     // pcl::PointCloud<pcl::PointXYZ> cloud;
+//     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+//     cloud->width = 5000;
+//     cloud->height = 2;
+//     cloud->is_dense = false;
+//     cloud->points.resize(cloud->width * cloud->height);
 
-    // for(size_t cnt = 0; cnt < cloud.points.size(); cnt++){
-        int cnt = 0;
-        for(int i=10; i<230; i++){
-            for(int j=30; j<250; j++){
-                for(int k=0; k<200; k++){
-                    if(W[i][j][k]==1) {
-                        cloud.points[cnt].x = i;
-                        cloud.points[cnt].y = j;
-                        cloud.points[cnt].z = k;
-                        cnt++;
-                    }
-                }
-            }
-    }
-    pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
-    // viewer.showCloud(cloud);
-
-
-
-}
+//     // for(size_t cnt = 0; cnt < cloud.points.size(); cnt++){
+//     int cnt = 0;
+//     for(int i=10; i<230; i++){
+//         for(int j=30; j<250; j++){
+//             for(int k=0; k<200; k++){
+//                 if(W[i][j][k]==1) {
+//                     cloud->points[cnt].x = i;
+//                     cloud->points[cnt].y = j;
+//                     cloud->points[cnt].z = k;
+//                     cnt++;
+//                 }
+//             }
+//         }
+//     }
+//     pcl::io::savePCDFileASCII ("test_pcd.pcd", *cloud);
+//     // viewer.showCloud(cloud);
+//     // viewer.showCloud(cloud);
+// }

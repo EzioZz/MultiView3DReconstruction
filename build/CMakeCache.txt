@@ -516,9 +516,6 @@ Qt5Sql_DIR:PATH=/usr/local/opt/qt/lib/cmake/Qt5Sql
 //The directory containing a CMake configuration file for Qt5Widgets.
 Qt5Widgets_DIR:PATH=/usr/local/opt/qt/lib/cmake/Qt5Widgets
 
-//The directory containing VTKConfig.cmake
-VTK_DIR:PATH=/usr/local/lib/cmake/vtk-8.2
-
 //Path to a library.
 pkgcfg_lib_FLANN_flann:FILEPATH=/usr/local/Cellar/flann/1.9.1_7/lib/libflann.dylib
 
