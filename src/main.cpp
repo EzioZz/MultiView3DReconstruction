@@ -130,7 +130,7 @@ void sculpt(){
             for(int k=0; k<200; k++){
                 int u,v;
                 int cnt = 0;
-                for(int no=3; no<4; no++){
+                for(int no=0; no<num_img; no++){
                     W2UV(no, 1.0*i, -1.0*j, -1.0*k, u, v);  //找对应UV图上的坐标
                     if(Picture[no][u][v] == 1) {  //如果挂点在物体上
                         cnt++;
