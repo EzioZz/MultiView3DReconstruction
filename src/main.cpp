@@ -32,7 +32,7 @@ int main(){
     init();
     sculpt();
     out();//以三维坐标的形式输出
-    debug();
+    // debug();
     // visualization();
     return 0;
 }
@@ -63,11 +63,11 @@ void init(){
     for(int i=0; i<num_img; i++){
         Mat temp(3, 4, CV_64F,EX[i]);
         matEX[i] = temp.clone();
-        cout<<matEX[i]<<endl;
+        // cout<<matEX[i]<<endl;
     }
     Mat temp(3,3,CV_64F,IN);
     matIN = temp.clone();
-    cout<<matIN<<endl;
+    // cout<<matIN<<endl;
     
     //---接下来生成matM 和 M[][]
     for(int i=0; i<num_img; i++){
@@ -130,19 +130,20 @@ void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
 void debug(){   //遍历三维空间，变换到标号为no的二维图上。看看变换成了哪些点
     for(int no=0; no<7; no++){
         Mat out(matPicture[no].size(), matPicture[no].type(), Scalar(255,255,255));
-        for(int i=0; i<230; i++){
-            for(int j=0; j<250; j++){
-                for(int k=0; k<200; k++){
+        for(int i=0; i<200; i++){
+            for(int j=0; j<225; j++){
+                for(int k=0; k<175; k++){
                     int u,v;
-                    W2UV(no,i,-1.0*j,-1.0*k,u,v);  //这里的no是指参数矩阵的编号
-                    circle(out, Point2i(v,u), 1, Scalar(0,0,0), 1);
+                    W2UV(no, i, -1*j, -1*k,u,v);  //这里的no是指参数矩阵的编号
+                    if(u>0 && v>0 && u<matPicture[no].cols && v<matPicture[no].rows)
+                        circle(out, Point2i(u,v), 1, Scalar(0,0,0), 1);
                 }
             }
         }
         imshow("out"+to_string(no), out);
-        waitKey(0);
+        // waitKey(0);
+        imwrite("out"+to_string(no)+".jpg", out);
     }
-
 }
 
 void sculpt(){
@@ -155,11 +156,11 @@ void sculpt(){
                 int cnt = 0;
                 for(int no=0; no<num_img; no++){
                     W2UV(no, 1.0*i, -1.0*j, -1.0*k, u, v);  //找对应UV图上的坐标
-                    if(Picture[no][u][v] == 1) {  //如果挂点在物体上
+                    if(u>0 && v>0 && u<matPicture[no].cols && v<matPicture[no].rows && Picture[no][v][u] == 1) {  //如果挂点在物体上
                         cnt++;
                     }
                 }
-                if(cnt>3) W[i][j][k]=1;
+                if(cnt>6) W[i][j][k]=1;
             }
         }
     }
@@ -175,7 +176,6 @@ void out(){
             }
         }
     }
-    
 }
 
 // void visualization(){
