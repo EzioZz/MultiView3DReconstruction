@@ -60,15 +60,15 @@ include CMakeFiles/3Dreconstruction.dir/flags.make
 CMakeFiles/3Dreconstruction.dir/src/main.cpp.o: CMakeFiles/3Dreconstruction.dir/flags.make
 CMakeFiles/3Dreconstruction.dir/src/main.cpp.o: ../src/main.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/3Dreconstruction.dir/src/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/3Dreconstruction.dir/src/main.cpp.o -c /Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/src/main.cpp
+	/usr/bin/clang++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/3Dreconstruction.dir/src/main.cpp.o -c /Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/src/main.cpp
 
 CMakeFiles/3Dreconstruction.dir/src/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/3Dreconstruction.dir/src/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/src/main.cpp > CMakeFiles/3Dreconstruction.dir/src/main.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/src/main.cpp > CMakeFiles/3Dreconstruction.dir/src/main.cpp.i
 
 CMakeFiles/3Dreconstruction.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/3Dreconstruction.dir/src/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/src/main.cpp -o CMakeFiles/3Dreconstruction.dir/src/main.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/src/main.cpp -o CMakeFiles/3Dreconstruction.dir/src/main.cpp.s
 
 # Object files for target 3Dreconstruction
 3Dreconstruction_OBJECTS = \

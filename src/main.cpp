@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 #include <opencv2/opencv.hpp>
-// #include <pcl/visualization/cloud_viewer.h>
-// #include <pcl/io/pcd_io.h>
-// #include <pcl/io/io.h>
+#include <pcl/visualization/cloud_viewer.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/io/io.h>
 
 using namespace std;
 using namespace cv;
@@ -32,8 +32,7 @@ int main(){
     init();
     sculpt();
     out();//以三维坐标的形式输出
-    // debug();
-    // visualization();
+    visualization();
     return 0;
 }
 
@@ -85,30 +84,15 @@ void init(){
     //接下来读入二值化的图像,并存成Picture[][][]的形式
     for(int i=0; i<num_img; i++){
         string img_path = path_fold_img + to_string(i+1) + ".jpg";
-        // cout<<img_path<<endl;
         matPicture[i] = imread(img_path, 0);
-        // imshow("matPicture["+to_string(i)+"]", matPicture[i]);
-        // cout<<"("<<matPicture[i].rows<<","<<matPicture[i].cols<<endl;
     }
     for(int no=0; no<num_img; no++){
         for(int i=0; i<matPicture[no].rows; i++){
             for(int j=0; j<matPicture[no].cols; j++){
-                //                cout<<(int)matPicture[no].at<uchar>(i,j)<<endl;
                 Picture[no][i][j] = ((int)matPicture[no].at<uchar>(i,j))<100? 1:0; //如果颜色深的话就为鼠标
-                //                if(Picture[no][i][j]==1) cout<<"!";
             }
         }
     }
-    
-    // int pick=1;
-    // Mat out(matPicture[pick].size(), matPicture[pick].type(), Scalar(255,255,255));
-    // for(int i=0; i<matPicture[pick].rows; i++){
-    //     for(int j=0; j<matPicture[pick].cols; j++){
-    //         if(Picture[pick][i][j]) circle(out, Point2i(j,i), 1, Scalar(0,0,0), 1);
-    //     }
-    // }
-    // imshow("out",out);
-    // waitKey(0);
     
 }
 
@@ -119,9 +103,7 @@ void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
     
     double su = M[NO][0][0]*((1.0)*Xw) + M[NO][0][1]*((1.0)*Yw) + M[NO][0][2]*((1.0)*Zw) + M[NO][0][3];
     double sv = M[NO][1][0]*((1.0)*Xw) + M[NO][1][1]*((1.0)*Yw) + M[NO][1][2]*((1.0)*Zw) + M[NO][1][3];
-    double s = M[NO][2][0]*((1.0)*Xw) + M[NO][2][1]*((1.0)*Yw) + M[NO][2][2]*((1.0)*Zw) + M[NO][2][3];
-    // waitKey(0);
-    // cout<<s<<endl;                                            
+    double s = M[NO][2][0]*((1.0)*Xw) + M[NO][2][1]*((1.0)*Yw) + M[NO][2][2]*((1.0)*Zw) + M[NO][2][3];                                         
     u = (int) su/s;
     v = (int) sv/s;
 }
@@ -140,18 +122,15 @@ void debug(){   //遍历三维空间，变换到标号为no的二维图上。看
                 }
             }
         }
-        imshow("out"+to_string(no), out);
-        // waitKey(0);
-        imwrite("out"+to_string(no)+".jpg", out);
     }
 }
 
 void sculpt(){
     memset(W,0,sizeof(W));
     //世界坐标系下鼠标的坐标范围是x:25-200 y:50-225 z:0-175
-    for(int i=10; i<230; i++){
-        for(int j=30; j<250; j++){
-            for(int k=0; k<200; k++){
+    for(int i=10; i<200; i++){
+        for(int j=30; j<225; j++){
+            for(int k=0; k<175; k++){
                 int u,v;
                 int cnt = 0;
                 for(int no=0; no<num_img; no++){
@@ -178,30 +157,30 @@ void out(){
     }
 }
 
-// void visualization(){
-//     // pcl::visualization::CloudViewer viewer("3DViewer");
-//     // pcl::PointCloud<pcl::PointXYZ> cloud;
-//     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
-//     cloud->width = 5000;
-//     cloud->height = 2;
-//     cloud->is_dense = false;
-//     cloud->points.resize(cloud->width * cloud->height);
+void visualization(){
+    // pcl::visualization::CloudViewer viewer("3DViewer");
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    // pcl::PointCloud<pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud<pcl::PointXYZ>);
+    cloud.width = 1000000;
+    cloud.height = 3;
+    cloud.is_dense = false;
+    cloud.points.resize(cloud.width * cloud.height);
 
-//     // for(size_t cnt = 0; cnt < cloud.points.size(); cnt++){
-//     int cnt = 0;
-//     for(int i=10; i<230; i++){
-//         for(int j=30; j<250; j++){
-//             for(int k=0; k<200; k++){
-//                 if(W[i][j][k]==1) {
-//                     cloud->points[cnt].x = i;
-//                     cloud->points[cnt].y = j;
-//                     cloud->points[cnt].z = k;
-//                     cnt++;
-//                 }
-//             }
-//         }
-//     }
-//     pcl::io::savePCDFileASCII ("test_pcd.pcd", *cloud);
-//     // viewer.showCloud(cloud);
-//     // viewer.showCloud(cloud);
-// }
+    // for(size_t cnt = 0; cnt < cloud.points.size(); cnt++){
+    int cnt = 0;
+    for(int i=10; i<200; i++){
+        for(int j=30; j<225; j++){
+            for(int k=0; k<175; k++){
+                if(W[i][j][k]==1) {
+                    cloud.points[cnt].x = i;
+                    cloud.points[cnt].y = j;
+                    cloud.points[cnt].z = k;
+                    cnt++;
+                }
+            }
+        }
+    }
+    pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
+    // viewer.showCloud(cloud);
+    // viewer.showCloud(cloud);
+}
