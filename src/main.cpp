@@ -7,6 +7,20 @@
 using namespace std;
 using namespace cv;
 
+
+typedef struct SearchWorldSpace{
+    int xs, xe;
+    int ys, ye;
+    int zs, ze;
+    SearchWorldSpace(){};
+    SearchWorldSpace(int _xs, int _xe, int _ys, int _ye, int _zs, int _ze){
+        xs = _xs; xe = _xe;
+        ys = _ys; ye = _ye;
+        zs = _zs; ze = _ze;
+    };
+}SWS;
+SWS SearchWS;
+
 int num_img; //图片的张数
 string path_fold_img; //图片文件夹的路径
 double EX[30][3][4];
@@ -19,25 +33,37 @@ Mat matIN;
 Mat matM[30];   // M[i] = matIN * matEX[i]
 Mat matPicture[10];
 int W[230][250][250];//只考虑了鼠标坐标系的范围, 值为 0/1，1表述该点属于鼠标
+long long preSum[230][250][250];//为W的的积分和
+
+vector<pcl::PointXYZ> surface;
+
+
 
 void init();
 void sculpt();
 void W2UV(int NO, double Xw, double Yw, double Zw, double &u, double &v);
 void out();
 void visualization();
+void findSurface();
+// void shade();
 
 void debug();
 
 int main(){
     init();
     sculpt();
-    out();//以三维坐标的形式输出
     visualization();
+    // findSurface();
+    // shade();
     return 0;
 }
 
 void init(){
     
+    //确立在三维空间中的搜索范围
+    SearchWorldSpace tempSearchWS(0,220, 20, 250, 0, 175);
+    SearchWS = tempSearchWS;
+
     //---读入txt文件
     num_img = 7;
     path_fold_img = "/Users/yanyucheng/OneDrive/codeProjects/3Dreconstruction/after_calibration/obj1/";
@@ -107,7 +133,6 @@ void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
     u = (int) su/s;
     v = (int) sv/s;
 }
-
 
 void debug(){   //遍历三维空间，变换到标号为no的二维图上。看看变换成了哪些点
     for(int no=0; no<7; no++){
@@ -181,6 +206,62 @@ void visualization(){
         }
     }
     pcl::io::savePCDFileASCII ("test_pcd.pcd", cloud);
-    // viewer.showCloud(cloud);
-    // viewer.showCloud(cloud);
+}
+
+
+
+// s[i][j][k]=(s[i-1][j][k]+s[i][j-1][k]+s[i][j][k-1])-(s[i-1][j-1][k]+s[i-1][j][k-1]+s[i][j-1][k-1])+s[i-1][j-1][k-1]+a[i][j][k]
+
+void findSurface(){
+    
+    memset(preSum,0,sizeof(preSum));
+    preSum[0][0][0] = W[0][0][0];
+    for(int i=1; i<220; i++){
+        for(int j=1; j<225; j++){
+            for(int k=1; k<175; k++){
+                preSum[i][j][k] = preSum[i][j][k-1] + W[i][j][k];
+            }
+        }
+    }
+    for(int i=1; i<220; i++){
+        for(int j=1; j<225; j++){
+            for(int k=1; k<175; k++){
+                preSum[i][j][k] += preSum[i][j-1][k];
+            }
+        }
+    }
+    for(int i=1; i<220; i++){
+        for(int j=1; j<225; j++){
+            for(int k=1; k<175; k++){
+                preSum[i][j][k] += preSum[i-1][j][k];           
+            }
+        }
+    }//https://www.luogu.org/blog/zhouzikai/ex-prefix
+
+    surface.clear();
+    //做三维的查分， 查分方块的大小为5*5*5
+
+    for(int i=2; i<(200-2); i++){
+        for(int j=2; j<(225-2); j++){
+            for(int k=2; k>(175-2); k++){
+                int u = i-2; int v = j-2; int w = k-2;
+                int x = i+2; int y = j+2; int z = k+2;
+                int cnt = preSum[x][y][z] - (preSum[u][y][z] + preSum[x][v][z] + preSum[x][y][w]) + (preSum[u][v][z] + preSum[u][y][w] + preSum[x][v][w]) - preSum[u][v][w];
+                if(cnt < 8) surface.push_back(pcl::PointXYZ(i, j, k));
+            }
+        }
+    }
+
+    pcl::PointCloud<pcl::PointXYZ> cloud;
+    cloud.width = surface.size();
+    cloud.height = 2;
+    cloud.is_dense = false;
+    cloud.points.resize(cloud.width * cloud.height);
+    cout<<"!?";
+    for(auto val : surface){
+        cloud.points.push_back(val);
+        cout<<"!";
+    }
+    pcl::io::savePCDFileASCII("surface.pcd", cloud);
+    
 }
