@@ -134,12 +134,12 @@ void debug(){   //遍历三维空间，变换到标号为no的二维图上。看
             for(int j=0; j<250; j++){
                 for(int k=0; k<200; k++){
                     int u,v;
-                    W2UV(1,i,-1.0*j,-1.0*k,u,v);  //这里的no是指参数矩阵的编号
-                    if(Picture[no][u][v] == 1) circle(out, Point2i(v,u), 1, Scalar(0,0,0), 1);
+                    W2UV(no,i,-1.0*j,-1.0*k,u,v);  //这里的no是指参数矩阵的编号
+                    circle(out, Point2i(v,u), 1, Scalar(0,0,0), 1);
                 }
             }
         }
-        imshow("out", out);
+        imshow("out"+to_string(no), out);
         waitKey(0);
     }
 
