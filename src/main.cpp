@@ -12,7 +12,7 @@ string path_fold_img; //图片文件夹的路径
 double EX[30][3][4];
 double IN[3][3]; //相机的内参
 double M[30][3][4]; // M[i] = matIN * matEX[i]
-int Picture[10][3022][4033];// 值为 0/1，1表述该点属于鼠标
+int Picture[10][3025][4040];// 值为 0/1，1表述该点属于鼠标
 //4032 × 3024
 Mat matEX[30];
 Mat matIN;
@@ -26,10 +26,13 @@ void W2UV(int NO, double Xw, double Yw, double Zw, double &u, double &v);
 void out();
 void visualization();
 
+void debug();
+
 int main(){
     init();
     sculpt();
     out();//以三维坐标的形式输出
+    debug();
     // visualization();
     return 0;
 }
@@ -85,6 +88,7 @@ void init(){
         // cout<<img_path<<endl;
         matPicture[i] = imread(img_path, 0);
         // imshow("matPicture["+to_string(i)+"]", matPicture[i]);
+        // cout<<"("<<matPicture[i].rows<<","<<matPicture[i].cols<<endl;
     }
     for(int no=0; no<num_img; no++){
         for(int i=0; i<matPicture[no].rows; i++){
@@ -117,9 +121,28 @@ void W2UV(int NO, double Xw, double Yw, double Zw, int &u, int &v){
     double sv = M[NO][1][0]*((1.0)*Xw) + M[NO][1][1]*((1.0)*Yw) + M[NO][1][2]*((1.0)*Zw) + M[NO][1][3];
     double s = M[NO][2][0]*((1.0)*Xw) + M[NO][2][1]*((1.0)*Yw) + M[NO][2][2]*((1.0)*Zw) + M[NO][2][3];
     // waitKey(0);
-    // cout<<s<<endl;
+    // cout<<s<<endl;                                            
     u = (int) su/s;
     v = (int) sv/s;
+}
+
+
+void debug(){   //遍历三维空间，变换到标号为no的二维图上。看看变换成了哪些点
+    for(int no=0; no<7; no++){
+        Mat out(matPicture[no].size(), matPicture[no].type(), Scalar(255,255,255));
+        for(int i=0; i<230; i++){
+            for(int j=0; j<250; j++){
+                for(int k=0; k<200; k++){
+                    int u,v;
+                    W2UV(1,i,-1.0*j,-1.0*k,u,v);  //这里的no是指参数矩阵的编号
+                    if(Picture[no][u][v] == 1) circle(out, Point2i(v,u), 1, Scalar(0,0,0), 1);
+                }
+            }
+        }
+        imshow("out", out);
+        waitKey(0);
+    }
+
 }
 
 void sculpt(){
@@ -136,7 +159,7 @@ void sculpt(){
                         cnt++;
                     }
                 }
-                if(cnt>0) W[i][j][k]=1;
+                if(cnt>3) W[i][j][k]=1;
             }
         }
     }
